@@ -1,4 +1,4 @@
-package com.glucode.about_you.viewModels
+package com.glucode.about_you.engineers.viewModels
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -14,16 +14,15 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class EngineersViewModel: ViewModel() {
+class EngineersViewModel(val sharedPref: SharedPreferenncesManager): ViewModel() {
 
     private var _engineersWithImages = MutableLiveData<List<Engineer>>()
     val engineerWithImages: LiveData<List<Engineer>> = _engineersWithImages
 
 
-    fun updateEngineerImages(context: Context, engineers: List<Engineer>) {
+    fun updateEngineerImages(engineers: List<Engineer>) {
         val lastIndex = engineers.size - 1
         val prefs = PreferencesManager()
-        val sharedPref = SharedPreferenncesManager(context)
         val updatedEngineers = ArrayList<Engineer>()
         engineers.forEachIndexed { index, engineer ->
             val imgUrl = sharedPref.readString(engineer.name)
@@ -53,23 +52,23 @@ class EngineersViewModel: ViewModel() {
         //_engineersWithImages = MutableLiveData<List<Engineer>>()
     }
 
-    fun sortByYears() {
-        _engineersWithImages.value?.let {
+    fun sortByYears(engineers: List<Engineer>? = _engineersWithImages.value) {
+        engineers?.let {
             val unSortedList = it
             val sorted = unSortedList.sortedWith(compareBy {it.quickStats.years})
             _engineersWithImages.value = sorted.asReversed()
         }
     }
 
-    fun sortByCoffees() {
-        _engineersWithImages.value?.let {
+    fun sortByCoffees(engineers: List<Engineer>? = _engineersWithImages.value) {
+        engineers?.let {
             val unSortedList = it
             val sorted = unSortedList.sortedWith(compareBy {it.quickStats.coffees})
             _engineersWithImages.value = sorted.asReversed()
         }
     }
-    fun sortByBugs() {
-        _engineersWithImages.value?.let {
+    fun sortByBugs(engineers: List<Engineer>? = _engineersWithImages.value) {
+        engineers?.let {
             val unSortedList = it
             val sorted = unSortedList.sortedWith(compareBy {it.quickStats.bugs})
             _engineersWithImages.value = sorted.asReversed()

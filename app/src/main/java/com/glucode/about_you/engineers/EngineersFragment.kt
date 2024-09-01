@@ -8,16 +8,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.glucode.about_you.R
 import com.glucode.about_you.common.PreferencesManager
+import com.glucode.about_you.common.SharedPreferenncesManager
 import com.glucode.about_you.databinding.FragmentEngineersBinding
 import com.glucode.about_you.engineers.models.Engineer
 import com.glucode.about_you.engineers.models.updateImage
 import com.glucode.about_you.mockdata.MockData
-import com.glucode.about_you.viewModels.EngineersViewModel
+import com.glucode.about_you.engineers.viewModels.EngineersViewModel
 import kotlinx.coroutines.launch
 
 class EngineersFragment : Fragment() {
     private lateinit var binding: FragmentEngineersBinding
-    private val viewModel: EngineersViewModel = EngineersViewModel()
+    lateinit var viewModel: EngineersViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +27,9 @@ class EngineersFragment : Fragment() {
     ): View {
         binding = FragmentEngineersBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
+        viewModel = EngineersViewModel(SharedPreferenncesManager(
+            requireContext()
+        ))
         setUpEngineersList(emptyList())
         return binding.root
     }
@@ -34,15 +38,9 @@ class EngineersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initObservers()
-        viewModel.updateEngineerImages(requireContext(), MockData.engineers)
-        //viewModel.updateEngineerImages(requireContext(), MockData.engineers)
+        viewModel.updateEngineerImages(MockData.engineers)
     }
 
-    override fun onResume() {
-        //viewModel.updateEngineerImages(requireContext(), MockData.engineers)
-        super.onResume()
-
-    }
 
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -76,7 +74,6 @@ class EngineersFragment : Fragment() {
 
             adapter.updateAdapterList(updatedEngineers)
             adapter.notifyDataSetChanged()
-
         }
     }
 
