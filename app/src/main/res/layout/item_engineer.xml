@@ -19,7 +19,8 @@
 
     <TextView
         android:id="@+id/name"
-        style="@style/Material.Body1.Medium.Dark"
+        style="@style/Material.Body1.Medium"
+        android:textColor="?attr/colorOnText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
@@ -35,6 +36,7 @@
     <TextView
         android:id="@+id/role"
         style="@style/Material.Body2"
+        android:textColor="?attr/colorOnText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
