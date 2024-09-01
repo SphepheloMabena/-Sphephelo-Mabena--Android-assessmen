@@ -14,6 +14,7 @@ import androidx.core.content.FileProvider
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.glucode.about_you.about.viewModels.AboutViewModel
 import com.glucode.about_you.about.views.ProfileCustomView
 import com.glucode.about_you.about.views.QuestionCardView
 import com.glucode.about_you.common.ImagePickerContract
@@ -25,17 +26,15 @@ import kotlinx.coroutines.launch
 
 class AboutFragment: Fragment() {
     private lateinit var binding: FragmentAboutBinding
-    val prefs = PreferencesManager()
-    private lateinit var sharedPref: SharedPreferenncesManager;
+    private lateinit var viewModel:AboutViewModel
     private val imagePickerLauncher = registerForActivityResult(ImagePickerContract()) { uri ->
         uri?.let {
+            val engineerName = arguments?.getString("name")
             val profile = binding.container.get(PROFILE_VIEW_INDEX) as ProfileCustomView
-            // Persist the access permissions
             val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             requireContext().contentResolver.takePersistableUriPermission(uri, takeFlags)
             profile.imageUri = it
-            saveImage(it.toString())
-
+            engineerName?.let { name -> viewModel.saveImage(name, it.toString()) }
         }
     }
 
@@ -50,7 +49,7 @@ class AboutFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPref =SharedPreferenncesManager(requireContext())
+        viewModel = AboutViewModel(requireContext())
         setUpProfileView()
         setUpQuestions()
         updateImage()
@@ -80,51 +79,24 @@ class AboutFragment: Fragment() {
         binding.container.addView(profileView)
     }
 
-
     private fun pickImage() {
         imagePickerLauncher.launch(Unit)
     }
 
-    private fun saveImage(uriString: String) {
-        val engineerName = arguments?.getString("name")
-        engineerName?.let { sharedPref.writeString(it, uriString) }
-
-        /*lifecycleScope.launch {
-            engineerName?.let { prefs.editStringPref(requireContext() ,it, uriString) }
-        }*/
-    }
-
-    private  fun updateImage() {
+    private fun updateImage() {
         val engineerName = arguments?.getString("name")
         engineerName?.let {
-            val imgUrl = sharedPref.readString(it)
+            val imgUrl = viewModel.getImageUriString(engineerName)
             imgUrl?.let {
-                if(it.isNotEmpty()) {
+                if (it.isNotEmpty()) {
                     val profile = binding.container.get(PROFILE_VIEW_INDEX) as ProfileCustomView
                     profile.imageUri = Uri.parse(imgUrl)
                 }
             }
         }
-        /*lifecycleScope.launch {
-            engineerName?.let { lifecycleScope.launch { prefs.getStringPref(requireContext(), engineerName).collect { imgUrl ->
-                val profile = binding.container.get(PROFILE_VIEW_INDEX) as ProfileCustomView
-                val contentResolver = requireContext().contentResolver
-                //val file = File()
-                //val uri = FileProvider.getUriForFile(context, "your.package.name.fileprovider", file)
-
-                //val inputStream = contentResolver.openInputStream(uri)
-
-                imgUrl?.let {
-                    profile.imageUri = Uri.parse(imgUrl)
-                }
-                    //profile.imageUri = Uri.parse(imgUrl) }
-            } } }
-        }*/
     }
 
     companion object {
-        private const val REQUEST_CODE = 233
         private const val PROFILE_VIEW_INDEX = 0
     }
-
 }
