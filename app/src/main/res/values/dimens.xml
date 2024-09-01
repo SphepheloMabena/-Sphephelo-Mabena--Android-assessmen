@@ -4,6 +4,7 @@
     <dimen name="none">0dp</dimen>
     <dimen name="divider_height">1dp</dimen>
     <dimen name="section_height">36dp</dimen>
+    <dimen name="profile_image_size">80dp</dimen>
 
     <!-- Padding -->
     <dimen name="padding_tiny">4dp</dimen>

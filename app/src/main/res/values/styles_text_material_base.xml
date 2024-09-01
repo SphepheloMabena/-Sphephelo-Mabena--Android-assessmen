@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- this file defines the base text styles, 'renamed' from material styles
 
@@ -26,21 +26,26 @@
     </style>
 
     <style name="Material.Headline4" parent="TextAppearance.MaterialComponents.Headline4">
-        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Material.Headline5" parent="TextAppearance.MaterialComponents.Headline5">
-        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Material.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textFontWeight" tools:ignore="NewApi">400</item>
     </style>
+
 
     <!--Subtitle-->
 
     <style name="Material.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textFontWeight" tools:ignore="NewApi">400</item>
     </style>
 
     <style name="Material.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
